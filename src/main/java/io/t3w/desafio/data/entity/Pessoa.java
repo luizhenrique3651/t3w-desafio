@@ -32,4 +32,12 @@ public class Pessoa {
         this.nome = nome;
         return this;
     }
+    
+    @Override
+    public String toString() {
+        return "Pessoa{id=" + id +
+               ", cpf='" + cpf + '\'' +
+               ", nome='" + nome + '\'' +
+               '}';
+    }
 }

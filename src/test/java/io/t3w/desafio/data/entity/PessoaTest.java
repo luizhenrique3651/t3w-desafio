@@ -7,7 +7,11 @@ class PessoaTest {
 
     @Test
     public void testToString(){
-        Assertions.assertEquals("Pessoa{id=666, cpf='0123456789', nome='Pessoa Teste'}",  new Pessoa());
-    }
+        Pessoa pessoa = new Pessoa()
+                .setId(666)
+                .setCpf("0123456789")
+                .setNome("Pessoa Teste");
 
-}
+        Assertions.assertEquals("Pessoa{id=666, cpf='0123456789', nome='Pessoa Teste'}", pessoa.toString());
+    }    }
+
