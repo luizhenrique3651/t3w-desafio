@@ -39,18 +39,27 @@ public class PessoasView extends VVerticalLayout implements BeforeEnterObserver 
         final var btnAdicionar = new T3WButton("Adicionar").themeTertiaryInline().themeSmall().withClassName("grid-actions")
             .withClickListener(ev -> new PessoaDialog(new Pessoa(), pessoaService, c -> {
                 // TODO: Adicionar pessoa ao grid
+            	pessoaService.save(c);
+            	gridPessoas.setItems(service.findPessoas());            	 
             }).open());
 
         gridPessoas.addColumn(new ComponentRenderer<>(pessoa -> {
             final var btnEditar = new T3WButton("Editar").themeTertiaryInline().themeSmall()
                 .withClickListener(ev -> new PessoaDialog(pessoa, pessoaService, c -> {
                     // TODO: Atualizar pessoa do grid
+                	 pessoa.setNome(c.getNome());
+                     pessoa.setCpf(c.getCpf());
+                     pessoaService.save(pessoa);
+                 	gridPessoas.setItems(service.findPessoas());            	 
+
                 }).open());
 
             final var btnRemover = new T3WButton("Excluir").themeTertiaryInline().themeError().themeSmall()
                 .withClickListener(ev -> {
                     // TODO: Remover pessoa do grid
-                });
+                    pessoaService.deleteById(pessoa.getId());
+                    gridPessoas.setItems(service.findPessoas());
+              });
 
             return new VDiv(btnEditar, btnRemover).withClassName("grid-actions");
         })).setHeader(btnAdicionar);
