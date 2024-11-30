@@ -9,3 +9,5 @@ VALUES
     ('Produto 2', 20.0),
     ('Produto 3', 20.0)
 ;
+
+
