@@ -1,34 +1,36 @@
 package io.t3w.desafio.services;
 
-import io.t3w.desafio.data.dao.PessoaDAO;
 import io.t3w.desafio.data.entity.Pessoa;
+import io.t3w.desafio.data.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PessoaService {
 
     @Autowired
-    private DataSource dataSource;
+    private PessoaRepository pessoaRepository;
 
     public List<Pessoa> findPessoas() {
-        try (final var connection = dataSource.getConnection()) {
-            return new PessoaDAO(connection).findAll();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return pessoaRepository.findAll();
     }
 
-    public Pessoa save(final Pessoa pessoa) {
-        // TODO: Implementar update e insert da pessoa
-        try (final var connection = dataSource.getConnection()) {
-            return null;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public Optional<Pessoa> findPessoaById(long id) {
+        return pessoaRepository.findById(id);
     }
 
+    public Pessoa save(Pessoa pessoa) {
+        return pessoaRepository.save(pessoa);
+    }
+
+    public boolean deleteById(long id) {
+        if (pessoaRepository.existsById(id)) {
+            pessoaRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }
