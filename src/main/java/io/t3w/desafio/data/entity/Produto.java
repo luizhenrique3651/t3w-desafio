@@ -21,8 +21,5 @@ public class Produto {
     private BigDecimal valorUnitario;
 
 
-    @Override
-    public String toString() {
-        return "Produto{id=" + id + ", descricao='" + descricao + "', valorUnitario=" + valorUnitario + '}';
-    }
+    
 }
