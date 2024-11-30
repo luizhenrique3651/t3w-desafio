@@ -1,36 +1,28 @@
 package io.t3w.desafio.data.entity;
 
+
 import java.math.BigDecimal;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Data;
+
+@Entity
+@Data
 public class Produto {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
     private String descricao;
     private BigDecimal valorUnitario;
 
-    public int getId() {
-        return id;
-    }
 
-    public Produto setId(int registro) {
-        this.id = registro;
-        return this;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public Produto setDescricao(String descricao) {
-        this.descricao = descricao;
-        return this;
-    }
-
-    public BigDecimal getValorUnitario() {
-        return valorUnitario;
-    }
-
-    public Produto setValorUnitario(BigDecimal valorUnitario) {
-        this.valorUnitario = valorUnitario;
-        return this;
+    @Override
+    public String toString() {
+        return "Produto{id=" + id + ", descricao='" + descricao + "', valorUnitario=" + valorUnitario + '}';
     }
 }
