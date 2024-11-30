@@ -6,6 +6,8 @@ import com.vaadin.flow.router.*;
 import io.t3w.desafio.components.T3WButton;
 import io.t3w.desafio.data.entity.Pessoa;
 import io.t3w.desafio.services.PessoaService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.firitin.components.formlayout.VFormLayout;
 import org.vaadin.firitin.components.grid.VGrid;
 import org.vaadin.firitin.components.html.VDiv;
@@ -20,6 +22,9 @@ import java.util.List;
 public class PessoasView extends VVerticalLayout implements BeforeEnterObserver {
 
     private final VGrid<Pessoa> gridPessoas;
+    
+    @Autowired
+    private PessoaService service;
 
     public PessoasView(final PessoaService pessoaService) {
         this.withFullWidth();
@@ -57,12 +62,8 @@ public class PessoasView extends VVerticalLayout implements BeforeEnterObserver 
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
-        // TODO: Buscar pessoas na base de dados e expor no grid
         gridPessoas.setItems(
-            List.of(
-                new Pessoa().setId(1L),
-                new Pessoa().setId(2L)
-            )
+                service.findPessoas()      
         );
     }
 }
