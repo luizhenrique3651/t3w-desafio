@@ -37,4 +37,23 @@ public class PessoaDAO extends DAO {
             }
         }
     }
+    
+    public Pessoa insert(Pessoa pessoa) throws SQLException {
+        String sql = "INSERT INTO pessoa (nome, cpf) VALUES (?, ?) RETURNING id";
+
+        try (PreparedStatement psmt = getConnection().prepareStatement(sql)) {
+            psmt.setString(1, pessoa.getNome());
+            psmt.setString(2, pessoa.getCpf());
+
+            try (ResultSet rs = psmt.executeQuery()) {
+                if (rs.next()) {
+                	// Define o ID retornado na instância da pessoa
+                    pessoa.setId(rs.getLong("id")); 
+                }
+            }
+        }
+
+        return pessoa; 
+    }
+
 }
