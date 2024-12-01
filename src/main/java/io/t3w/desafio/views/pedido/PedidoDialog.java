@@ -1,5 +1,18 @@
 package io.t3w.desafio.views.pedido;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.firitin.components.button.VButton;
+import org.vaadin.firitin.components.combobox.VComboBox;
+import org.vaadin.firitin.components.dialog.VDialog;
+import org.vaadin.firitin.components.grid.VGrid;
+import org.vaadin.firitin.components.html.VDiv;
+import org.vaadin.firitin.components.textfield.VTextField;
+
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
@@ -14,27 +27,14 @@ import io.t3w.desafio.services.PedidoItemService;
 import io.t3w.desafio.services.PedidoService;
 import io.t3w.desafio.services.PessoaService;
 import io.t3w.desafio.services.ProdutoService;
-import io.t3w.desafio.views.pessoa.PessoaDialog;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.firitin.components.button.VButton;
-import org.vaadin.firitin.components.combobox.VComboBox;
-import org.vaadin.firitin.components.dialog.VDialog;
-import org.vaadin.firitin.components.grid.VGrid;
-import org.vaadin.firitin.components.html.VDiv;
-import org.vaadin.firitin.components.textfield.VTextField;
-
-import java.math.BigDecimal;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.function.Consumer;
+import jakarta.persistence.EntityManager;
 
 public class PedidoDialog extends VDialog {
 
 	private static final long serialVersionUID = 1L;
 
+	
+	
 	public PedidoDialog(final Pedido pedido, final PedidoService pedidoService, PedidoItemService pedidoItemService,
 			PessoaService pessoaService, ProdutoService produtoService, final Consumer<Pedido> consumer) {
 		setHeaderTitle("Pedido");
@@ -106,7 +106,8 @@ public class PedidoDialog extends VDialog {
 					.withClickListener(ev -> {
 						// TODO: Remova o item do grid
 						pedidoItemService.deleteById(pedidoOnDialog.getId());
-						gridItens.getListDataView().removeItem(pedidoOnDialog);
+						pedido.getItens().removeIf(item -> item.getId() == pedidoOnDialog.getId());
+						gridItens.setItems(pedido.getItens());
 					});
 
 			return new VDiv(btnEditar, btnRemover).withClassName("grid-actions");
@@ -114,7 +115,8 @@ public class PedidoDialog extends VDialog {
 
 		final var btnSalvar = new T3WButton("Salvar").themePrimary().withClickListener(ev -> {
 			// TODO: Salve o pedido
-			final var pedidoSalvo = pedidoService.save(binder.getObject());
+			pedido.setItens(new ArrayList<>(pedido.getItens()));
+			final var pedidoSalvo = pedidoService.save(pedido);
 			consumer.accept(pedidoSalvo);
 
 			this.close();
