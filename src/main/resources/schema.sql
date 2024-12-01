@@ -27,3 +27,7 @@ CREATE TABLE pedido_item (
     FOREIGN KEY (produto_id) REFERENCES produto(id),
     FOREIGN KEY (pedido_id) REFERENCES pedido(id)
 );
+
+CREATE INDEX idx_pedido_pessoa ON pedido(pessoa_id);
+CREATE INDEX idx_pedido_item_produto ON pedido_item(produto_id);
+CREATE INDEX idx_pedido_item_pedido ON pedido_item(pedido_id);
