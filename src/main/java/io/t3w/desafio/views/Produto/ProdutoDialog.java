@@ -37,7 +37,8 @@ public class ProdutoDialog extends VDialog {
         final var btnSalvar = new T3WButton("Salvar").themePrimary()
             .withClickListener(ev -> {
                 // TODO: Implementar update e insert do produto
-//                final var produtoSalvo = produtoService.save(binder.getObject());
+                final var produtoSalvo = produtoService.save(binder.getObject());
+                consumer.accept(produtoSalvo);
                 this.close();
             });
 

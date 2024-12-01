@@ -14,22 +14,18 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    // Método para buscar todos os produtos
     public List<Produto> findProdutos() {
         return produtoRepository.findAll();
     }
 
-    // Método para buscar um produto por ID
     public Optional<Produto> findProdutoById(Long id) {
         return produtoRepository.findById(id);
     }
 
-    // Método para salvar ou atualizar produto
     public Produto save(Produto produto) {
         return produtoRepository.save(produto);
     }
 
-    // Método para deletar produto por ID
     public boolean deleteById(Long id) {
         if (produtoRepository.existsById(id)) {
             produtoRepository.deleteById(id);
