@@ -23,6 +23,9 @@ public class PessoaDialog extends VDialog {
 
         final var tfID = new VTextField("ID").withReadOnly(true);
         binder.forField(tfID).bindReadOnly(p -> String.valueOf(p.getId()));
+        if(tfID.getValue().equals("0")) {
+        	tfID.setVisible(false);
+        }
         form.add(tfID);
 
         final var tfCPF = new VTextField("CPF");

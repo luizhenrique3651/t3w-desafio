@@ -1,17 +1,26 @@
 package io.t3w.desafio.views.Produto;
 
-import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.router.*;
-import io.t3w.desafio.components.T3WButton;
-import io.t3w.desafio.components.T3WFormLayout;
-import io.t3w.desafio.data.entity.Produto;
-import io.t3w.desafio.services.ProdutoService;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.firitin.components.grid.VGrid;
 import org.vaadin.firitin.components.html.VDiv;
 import org.vaadin.firitin.components.orderedlayout.VVerticalLayout;
+
+import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.Menu;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+
+import io.t3w.desafio.T3WUtils;
+import io.t3w.desafio.components.T3WButton;
+import io.t3w.desafio.components.T3WFormLayout;
+import io.t3w.desafio.data.entity.Produto;
+import io.t3w.desafio.services.ProdutoService;
 
 @Route("produtos")
 @PageTitle("Produtos")
@@ -33,7 +42,11 @@ public class ProdutosView extends VVerticalLayout implements BeforeEnterObserver
         gridProdutos.withThemeVariants(GridVariant.LUMO_NO_BORDER);
         gridProdutos.addColumn(Produto::getId).setHeader("ID");
         gridProdutos.addColumn(Produto::getDescricao).setHeader("Descrição");
-        gridProdutos.addColumn(Produto::getValorUnitario).setHeader("Valor");
+        gridProdutos.addColumn(produto -> {
+		    return T3WUtils.formataValor(produto.getValorUnitario());
+        }).setHeader("Valor");
+
+//        gridProdutos.addColumn(Produto::getValorUnitario).setHeader("Valor");
 
         final var btnAdicionar = new T3WButton("Adicionar").themeTertiaryInline().themeSmall().withClassName("grid-actions")
             .withClickListener(ev -> new ProdutoDialog(new Produto(), produtoService, consumerProduto -> {

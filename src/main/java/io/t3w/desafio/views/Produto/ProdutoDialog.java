@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 public class ProdutoDialog extends VDialog {
 
     public ProdutoDialog(final Produto produto, final ProdutoService produtoService, final Consumer<Produto> consumer) {
-        setHeaderTitle("Pessoa");
+        setHeaderTitle("Produto");
 
         final var form = new T3WFormLayout();
         this.add(form);
@@ -24,6 +24,9 @@ public class ProdutoDialog extends VDialog {
 
         final var tfID = new VTextField("ID").withReadOnly(true);
         binder.forField(tfID).bindReadOnly(p -> String.valueOf(p.getId()));
+        if(tfID.getValue().equals("0")) {
+        	tfID.setVisible(false);
+        }
         form.add(tfID);
 
         final var tfDescricao = new VTextField("Descricao");

@@ -9,6 +9,9 @@ import com.vaadin.flow.router.Route;
 import io.t3w.desafio.components.T3WContentLayout;
 import io.t3w.desafio.data.entity.Pedido;
 import io.t3w.desafio.data.entity.PedidoItem;
+
+import java.math.BigDecimal;
+
 import org.vaadin.firitin.components.grid.VGrid;
 import org.vaadin.firitin.components.html.VDiv;
 import org.vaadin.firitin.components.html.VH4;
@@ -34,7 +37,7 @@ public class PedidoView extends T3WContentLayout implements BeforeEnterObserver 
         gridItens.addColumn(PedidoItem::getQuantidade).setHeader("Quantidade");
         gridItens.addColumn(p ->{
             // TODO: Implementar cálculo do valor total dos itens do pedido e formatá-lo no padrão brasileiro (1.000,00)
-            return null;
+            return p.getProduto().getValorUnitario().multiply(BigDecimal.valueOf(p.getQuantidade()));
         }).setHeader("Valor");
 
         this.add(createCard("Pedido",gridPedido), createCard("Itens", gridItens));
