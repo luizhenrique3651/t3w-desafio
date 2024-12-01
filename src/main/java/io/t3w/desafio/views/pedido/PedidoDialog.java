@@ -8,7 +8,13 @@ import io.t3w.desafio.components.T3WFormLayout;
 import io.t3w.desafio.data.entity.Pedido;
 import io.t3w.desafio.data.entity.PedidoItem;
 import io.t3w.desafio.data.entity.Pessoa;
+import io.t3w.desafio.services.PedidoItemService;
+import io.t3w.desafio.services.PedidoService;
+import io.t3w.desafio.services.PessoaService;
 import io.t3w.desafio.services.ProdutoService;
+import io.t3w.desafio.views.pessoa.PessoaDialog;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.firitin.components.button.VButton;
 import org.vaadin.firitin.components.combobox.VComboBox;
 import org.vaadin.firitin.components.dialog.VDialog;
@@ -17,11 +23,15 @@ import org.vaadin.firitin.components.html.VDiv;
 import org.vaadin.firitin.components.textfield.VTextField;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class PedidoDialog extends VDialog {
+	
+	private static final long serialVersionUID = 1L;
 
-    public PedidoDialog(final Pedido pedido, final ProdutoService produtoService, final Consumer<Pedido> consumer) {
+    public PedidoDialog(final Pedido pedido, final PedidoService pedidoService, PedidoItemService pedidoItemService, PessoaService pessoaService, ProdutoService produtoService, final Consumer<Pedido> consumer) {
         setHeaderTitle("Pedido");
         setWidthFull();
 
@@ -31,11 +41,18 @@ public class PedidoDialog extends VDialog {
         // TODO: Nao renderize o id caso seja uma inclusao
         final var tfID = new VTextField("ID").withReadOnly(true);
         binder.forField(tfID).bindReadOnly(p -> String.valueOf(p.getId()));
+        if(tfID.getValue().equals("0")) {
+        	tfID.setVisible(false);
+        }
         form.add(tfID);
 
         // TODO: Preencher combobox com pessoas para o usuario selecionar
         final var cbPessoa = new VComboBox<Pessoa>("Pessoa");
+        cbPessoa.setItems(pessoaService.findPessoas());
+
         binder.forField(cbPessoa).bind(Pedido::getPessoa, Pedido::setPessoa);
+        
+        cbPessoa.setItemLabelGenerator(Pessoa::getNome);
         form.add(cbPessoa, 2);
 
         final var gridItens = new VGrid<PedidoItem>().withThemeVariants(GridVariant.LUMO_NO_BORDER);
@@ -45,9 +62,20 @@ public class PedidoDialog extends VDialog {
         gridItens.addColumn(p -> p.getProduto().getValorUnitario().multiply(BigDecimal.valueOf(p.getQuantidade()))).setHeader("Valor");
 
         final var btnAdicionar = new T3WButton("Adicionar").themeTertiaryInline().themeSmall().withClassName("grid-actions")
-            .withClickListener(ev -> {
-                // TODO: Abrir um Dialog para seleção do item e quantidade
-            });
+            .withClickListener(ev -> new PedidoItemDialog(new PedidoItem(), produtoService, c -> {
+                // TODO: Adicionar pessoa ao grid
+            	if(pedido.getItens() != null) {
+            	pedido.getItens().add(c);
+            	}else {
+            		List<PedidoItem> listaItens = new ArrayList<>();
+            		listaItens.add(c);
+            		pedido.setItens(listaItens);
+            	}
+            	gridItens.setItems(pedido.getItens());            	 
+            }).open());
+
+               // TODO: Abrir um Dialog para seleção do item e quantidade
+
 
         gridItens.addColumn(new ComponentRenderer<>(pessoa -> {
             final var btnEditar = new T3WButton("Editar").themeTertiaryInline().themeSmall()
@@ -67,6 +95,10 @@ public class PedidoDialog extends VDialog {
         final var btnSalvar = new T3WButton("Salvar").themePrimary()
             .withClickListener(ev -> {
                 // TODO: Salve o pedido
+            	final var pedidoSalvo = pedidoService.save(binder.getObject());
+            	consumer.accept(pedidoSalvo);
+            	
+            	
                 this.close();
             });
 
