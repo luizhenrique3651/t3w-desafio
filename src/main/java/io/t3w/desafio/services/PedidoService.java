@@ -1,6 +1,7 @@
 package io.t3w.desafio.services;
 
 import io.t3w.desafio.data.entity.Pedido;
+import io.t3w.desafio.data.entity.PedidoItem;
 import io.t3w.desafio.data.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class PedidoService {
     }
 
     public Pedido save(Pedido pedido) {
+        pedido.getItens().forEach(item -> item.setPedido(pedido));
         return pedidoRepository.save(pedido);
     }
 
