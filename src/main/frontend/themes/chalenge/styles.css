@@ -1,31 +1,30 @@
 @import url('./main-layout.css');
 
 .card {
-    background-color: var(--lumo-base-color);
-    border-radius: var(--lumo-border-radius-m);
-    box-shadow: var(--lumo-box-shadow-xs);
-    padding: var(--lumo-space-m);
-    width: 100%;
+	background-color: var(--lumo-base-color);
+	border-radius: var(--lumo-border-radius-m);
+	box-shadow: var(--lumo-box-shadow-xs);
+	padding: var(--lumo-space-m);
+	width: 100%;
 }
 
 .dialog-footer {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    gap: 12px;
-    & > * {
-        flex-grow: 1;
-        flex-basis: 0;
-        max-width: 20%;
-        min-width: 100px;
-    }
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+	gap: 12px; & > * {
+	flex-grow: 1;
+	flex-basis: 0;
+	max-width: 20%;
+	min-width: 100px;
 }
 
+}
 .grid-actions {
-    font-size: 0.85rem;
+	font-size: 0.85rem;
 }
 
 div.grid-actions {
-    display: flex;
-    gap: 12px;
+	display: flex;
+	gap: 12px;
 }
