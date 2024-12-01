@@ -1,6 +1,8 @@
 package io.t3w.desafio;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public abstract class T3WUtils {
 	public static BigDecimal calcularValorTotal(final int quantidade, final BigDecimal valorUnitario) {
@@ -8,5 +10,9 @@ public abstract class T3WUtils {
 			throw new IllegalArgumentException("Quantidade ou valor unitário inválido");
 		}
 		return valorUnitario.multiply(BigDecimal.valueOf(quantidade));
+	}
+	public static String formataValor(BigDecimal valor) {
+	    NumberFormat formatador = NumberFormat.getCurrencyInstance(Locale.of("pt", "BR"));
+	    return formatador.format(valor);
 	}
 }
